@@ -1,0 +1,42 @@
+/* Style the page elements */
+.choice-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .choice {
+    margin: 10px 0;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .vote-again-button,
+  .back-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .vote-again-button {
+    background-color: #ffc107; /* Yellow */
+  }
+  
+  .back-button {
+    background-color: #808080; /* Gray */
+    color: white;
+  }
+
+  li a {
+    color: green;
+}

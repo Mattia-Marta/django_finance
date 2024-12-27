@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Conferma Eliminazione Spesa{% endblock %}
+
+{% block content %}
+    <h1>Conferma Eliminazione Spesa</h1>
+
+    <div class="alert alert-danger" role="alert">
+        <p>Sei sicuro di voler eliminare la spesa di {{ spesa.owner }} di {{ spesa.spesa }}€ del {{ spesa.data }}?</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sì, Elimina</button>
+        <a href="{% url 'spesa:lista_spese' %}" class="btn btn-secondary">No, Annulla e torna alla lista</a>
+    </form>
+{% endblock %}

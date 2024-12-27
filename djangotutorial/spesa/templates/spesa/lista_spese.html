@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Lista Spese{% endblock %}
+
+{% block content %}
+    <h1>Lista Spese</h1>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">
+                {% if debito >= 0 %}
+                    Debito di {{ owner1 }} verso {{ owner2 }}
+                {% else %}
+                    Debito di {{ owner2 }} verso {{ owner1 }}
+                {% endif %}
+            </h5>
+            <p class="card-text">€ {{ debito_assoluto|floatformat:2 }}</p> <!-- floatformat:2 per arrotondare a 2 decimali -->
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <a href="{% url 'spesa:lista_spese' %}" class="btn btn-secondary {% if not filtro_corrente %}active{% endif %}">Mostra tutte</a>
+        <a href="{% url 'spesa:lista_spese' %}?saldate=si" class="btn btn-success {% if filtro_corrente == 'si' %}active{% endif %}">Mostra saldate</a>
+        <a href="{% url 'spesa:lista_spese' %}?saldate=no" class="btn btn-danger {% if filtro_corrente == 'no' %}active{% endif %}">Mostra non saldate</a>
+    </div>
+
+    <a href="{% url 'spesa:nuova_spesa' %}" class="btn btn-primary mb-3">Aggiungi nuova spesa</a>
+
+    {% if spese %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Proprietario</th>
+                    <th>Importo</th>
+                    <th>Data</th>
+                    <th>Saldato</th>
+                    <th>Categorie</th>
+                    <th>Azioni</th>
+                    <th>Salda</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for spesa in spese %}
+                    <tr>
+                        <td>{{ spesa.owner }}</td>
+                        <td>{{ spesa.spesa }}€</td>
+                        <td>{{ spesa.data }}</td>
+                        <td>{% if spesa.saldata %}Sì{% else %}No{% endif %}</td>
+                        <td>
+                            {% for categoria in spesa.categorie.all %}
+                                <span class="badge bg-secondary">{{ categoria.nome }}</span>{% if not forloop.last %}&nbsp;{% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{% url 'spesa:modifica_spesa' spesa.pk %}" class="btn btn-sm btn-warning">Modifica</a>
+                            <a href="{% url 'spesa:elimina_spesa' spesa.pk %}" class="btn btn-sm btn-danger">Elimina</a>
+                        </td>
+                        <td>
+                            {% if not spesa.saldata %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="spesa_id" value="{{ spesa.pk }}">
+                                    <button type="submit" class="btn btn-sm btn-success">Salda</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nessuna spesa presente.</p>
+    {% endif %}
+{% endblock %}
